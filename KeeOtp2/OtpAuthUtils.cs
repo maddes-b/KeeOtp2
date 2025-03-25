@@ -172,7 +172,7 @@ namespace KeeOtp2
                 if (parameters[KeeOtp1EncodingParameter] != null)
                     data.Encoding = (OtpSecretEncoding)Enum.Parse(typeof(OtpSecretEncoding), parameters[KeeOtp1EncodingParameter], true);
 
-                data.SetPlainSecret(correctPlainSecret(parameters[KeeOtp1KeyParameter].Replace("%3d", "="), data.Encoding));
+                data.SetPlainSecret(correctPlainSecret(parameters[KeeOtp1KeyParameter], data.Encoding));
 
                 if (parameters[KeeOtp1OtpHashModeParameter] != null)
                     data.Algorithm = (OtpHashMode)Enum.Parse(typeof(OtpHashMode), parameters[KeeOtp1OtpHashModeParameter], true);
@@ -188,7 +188,6 @@ namespace KeeOtp2
                 data.Digits = GetIntOrDefault(parameters, KeeOtp1SizeParameter, 6);
                 if (data.Type == OtpType.Hotp && data.Digits != 6)
                     data.Proprietary = false;
-
 
                 return data;
             }
@@ -398,7 +397,7 @@ namespace KeeOtp2
         /// of people with just a 3.5 or 4.0 client profile getting errors
         /// as the System.Web assembly where .net's implementation of
         /// Url encoding and query string parsing is located.
-        /// 
+        ///
         /// This should be fine since the only thing stored in the string
         /// that needs to be encoded or decoded is the '=' sign.
         /// </remarks>
@@ -415,7 +414,7 @@ namespace KeeOtp2
                     if (pieces.Length != 2)
                         continue;
 
-                    collection.Add(pieces[0], pieces[1].Replace("%3d", "="));
+                    collection.Add(pieces[0], pieces[1].Replace("%3d", "=").Replace("%3D", "="));
                 }
             }
 
@@ -517,7 +516,7 @@ namespace KeeOtp2
                 parameters.Add(String.Format("{0}={1}", uriEncoderKey, OtpType.Steam.ToString().ToLower()));
             }
 
-            uriBuilder.Query = String.Join("&", parameters.ToArray()); 
+            uriBuilder.Query = String.Join("&", parameters.ToArray());
 
             return uriBuilder.Uri;
         }
@@ -566,7 +565,6 @@ namespace KeeOtp2
                 data.Type = (OtpType)Enum.Parse(typeof(OtpType), parameters[uriEncoderKey], true);
                 data.Proprietary = false;
             }
-                
 
             data.Encoding = OtpSecretEncoding.Base32;
 
@@ -587,8 +585,7 @@ namespace KeeOtp2
 
             data.Digits = GetIntOrDefault(parameters, uriDigitsKey, 6);
 
-            return data;                   
-                
+            return data;
         }
 
         public static Uri bitmapToUri(Bitmap bitmap)
