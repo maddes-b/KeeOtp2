@@ -1,4 +1,4 @@
-﻿using KeeOtp2;
+using KeeOtp2;
 using KeePassLib;
 using KeePassLib.Security;
 using System;
@@ -24,10 +24,9 @@ namespace KeeOtp2.Tests
         public void TestKeyFormat(string keyStringName, string keyStringValue, MigrationMode migrateMode,
             bool canMigrate, bool canLoad)
         {
-            
             var pwdEntry = new PwEntry(true, true);
             pwdEntry.Strings.Set(keyStringName, new ProtectedString(true, keyStringValue));
-            Console.WriteLine(keyStringValue);
+            Console.WriteLine("{0}: {1}", keyStringName, keyStringValue);
             Assert.Equal(canMigrate, OtpAuthUtils.checkEntryMigratable(pwdEntry, migrateMode));
             if (canLoad)
                 Assert.NotNull(OtpAuthUtils.loadData(pwdEntry));
