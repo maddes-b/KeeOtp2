@@ -129,6 +129,8 @@ namespace KeeOtp2
 
             foreach (MigrationMode migrationMode in Enum.GetValues(typeof(MigrationMode)))
             {
+                if (migrationMode == MigrationMode.None)
+                    continue;
                 MigrationProfile migrationProfile = new MigrationProfile(migrateModeString[migrationMode], migrationMode, migrateModePlaceholder[migrationMode]["find"], migrateModePlaceholder[migrationMode]["replace"]);
                 comboBoxMigrationProfileIndexes.Add(comboBoxMigrate.Items.Add(migrationProfile.name), migrationProfile);
             }
@@ -357,7 +359,7 @@ namespace KeeOtp2
             int succeeded = 0;
 
             labelStatus.Text = String.Format(KeeOtp2Statics.SettingsLoadedNEntries, count);
-            
+
             foreach (PwEntry entry in entries)
             {
                 if (entry.ParentGroup.Uuid != RecycleBinUuid)
@@ -393,7 +395,7 @@ namespace KeeOtp2
                                 default:
                                     break;
                             }
-                                
+
                             if (migrateAutoType)
                             {
                                 foreach(string currentPlaceholder in currentMigrationProfile.findPlaceholder.Values)
@@ -406,7 +408,7 @@ namespace KeeOtp2
                         }
                         else
                         {
-                            this.Invoke((Action)(() => 
+                            this.Invoke((Action)(() =>
                             {
                                 if (MessageBox.Show(String.Format(KeeOtp2Statics.MessageBoxCantParseEntry, entry.ParentGroup.Name, entry.Strings.ReadSafe(PwDefs.TitleField), entry.Strings.ReadSafe(PwDefs.UserNameField)), KeeOtp2Statics.Migration, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                                     backgroundWorkerMigrate.CancelAsync();

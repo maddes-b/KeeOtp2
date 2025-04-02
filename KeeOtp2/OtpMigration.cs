@@ -9,7 +9,9 @@ namespace KeeOtp2
     public enum MigrationMode
     {
         KeeOtp1ToBuiltIn,
-        BuiltInToKeeOtp1
+        BuiltInToKeeOtp1,
+        // last entry "None" is for test cases without conversion
+        None = 999,
     }
 
     public class MigrationProfile
